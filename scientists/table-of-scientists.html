@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+
+<!--
+ * Copyright © 2018-2024
+ * Merz Information and Communication Technology AG.
+ * All rights reserved.
+ * 
+ * C021-DE
+ * Einführung in CSS
+-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>University, Science and Literature Information Guide (USLIG)</title>
+    <base href="http://localhost/uslig/"/>
+    <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+  </head>
+  <body>
+    <header>
+      <h1>University, Science and Literature Information Guide (USLIG)</h1>
+      <menu>
+        <div class="dropdown">
+          <button class="dropdown-label">Universitäten</button>
+          <div class="dropdown-points">
+            <a href="universities/list-of-universities-by-name.html">Liste nach Namen</a>
+            <a href="universities/list-of-universities-by-country.html">Liste nach Land</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Wissenschaftler</button>
+          <div class="dropdown-points">
+            <a href="scientists/table-of-scientists.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Schriftsteller</button>
+          <div class="dropdown-points">
+            <a href="writers/table-of-writers.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Nobelpreise</button>
+          <div class="dropdown-points">
+            <a href="awards/list-of-nobel-prizes.html">Liste</a>
+            <a href="awards/form-for-nobel-prize-laureates.html">Suche nach Nobelpreisträgern</a>
+          </div>
+        </div>
+      </menu>
+    </header>
+    <main>
+      <header>
+        <h2>Tabelle der Wissenschaftler</h2>
+        <h3>alle Wissenschaftler</h3>
+      </header>
+      <table id="scientists">
+        <colgroup>
+          <col span="2"/>
+          <col span="2"/>
+          <col/>
+        </colgroup>
+        <thead>
+          <tr>
+            <th colspan="2" scope="colgroup">Personalien</th>
+            <th colspan="2" scope="colgroup">Lebensdaten</th>
+            <th rowspan="2" scope="col">Alma Mater</th>
+          </tr>
+          <tr>
+            <th scope="col">Vorname</th>
+            <th scope="col">Nachname</th>
+            <th scope="col">Geburtsdatum</th>
+            <th scope="col">Todesdatum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="baseline">
+            <td>Pierre</td>
+            <td>Curie</td>
+            <td class="center">1859-05-15</td>
+            <td class="center">1906-04-19</td>
+            <td>
+              <a href="universities/details-for-university-FR-001.html">Université de Paris</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>Marie</td>
+            <td>Curie</td>
+            <td class="center">1867-11-07</td>
+            <td class="center">1934-07-04</td>
+            <td>
+              <a href="universities/details-for-university-FR-001.html">Université de Paris</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>Lise</td>
+            <td>Meitner</td>
+            <td class="center">1878-11-07</td>
+            <td class="center">1968-10-27</td>
+            <td>
+              <a href="universities/details-for-university-AT-001.html">Universität Wien</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>Max</td>
+            <td>Born</td>
+            <td class="center">1882-12-11</td>
+            <td class="center">1970-01-05</td>
+            <td>
+              <a href="universities/details-for-university-DE-002.html">Georg-August-Universität Göttingen</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>Enrico</td>
+            <td>Fermi</td>
+            <td class="center">1901-09-29</td>
+            <td class="center">1954-11-28</td>
+            <td>
+              <a href="universities/details-for-university-IT-001.html">Scuola Normale Superiore</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>François</td>
+            <td>Englert</td>
+            <td class="center">1932-11-06</td>
+            <td class="center"></td>
+            <td>
+              <a href="universities/details-for-university-BE-001.html">Université libre de Bruxelles</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>Stephen</td>
+            <td>Hawking</td>
+            <td class="center">1942-01-08</td>
+            <td class="center">2018-03-14</td>
+            <td>
+              <a href="universities/details-for-university-GB-002.html">University of Oxford</a><br/>
+              <a href="universities/details-for-university-GB-001.html">University of Cambridge</a>
+            </td>
+          </tr>
+          <tr class="baseline">
+            <td>John Michael</td>
+            <td>Kosterlitz</td>
+            <td class="center">1943-06-22</td>
+            <td class="center"></td>
+            <td>
+              <a href="universities/details-for-university-GB-001.html">University of Cambridge</a><br/>
+              <a href="universities/details-for-university-GB-002.html">University of Oxford</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <footer>
+      <p>Copyright&nbsp;©&nbsp;2018&#x2011;2024&nbsp;&nbsp;USLIG.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+
+<!--
+ * Copyright © 2018-2024
+ * Merz Information and Communication Technology AG.
+ * All rights reserved.
+ * 
+ * C021-DE
+ * Einführung in CSS
+-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>University, Science and Literature Information Guide (USLIG)</title>
+    <base href="http://localhost/uslig/"/>
+    <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+  </head>
+  <body>
+    <header>
+      <h1>University, Science and Literature Information Guide (USLIG)</h1>
+      <menu>
+        <div class="dropdown">
+          <button class="dropdown-label">Universitäten</button>
+          <div class="dropdown-points">
+            <a href="universities/list-of-universities-by-name.html">Liste nach Namen</a>
+            <a href="universities/list-of-universities-by-country.html">Liste nach Land</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Wissenschaftler</button>
+          <div class="dropdown-points">
+            <a href="scientists/table-of-scientists.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Schriftsteller</button>
+          <div class="dropdown-points">
+            <a href="writers/table-of-writers.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Nobelpreise</button>
+          <div class="dropdown-points">
+            <a href="awards/list-of-nobel-prizes.html">Liste</a>
+            <a href="awards/form-for-nobel-prize-laureates.html">Suche nach Nobelpreisträgern</a>
+          </div>
+        </div>
+      </menu>
+    </header>
+    <main>
+      <header>
+        <h2>Suche nach Nobelpreisträgern</h2>
+      </header>
+      <form action="awards/find-nobel-prize-laureates.php">
+        <fieldset>
+          <legend>Suchkriterien</legend>
+          <p>
+            <label for="year">Jahr:</label>
+            <input type="number" id="year" name="year" min="1901" max="2022" value="2001"/>
+          </p>
+          <p>
+            <label for="fields">Kategorie:</label>
+            <select id="fields" name="field">
+              <option value="physics">Physik</option>
+              <option value="chemistry">Chemie</option>
+              <option value="physiology-medicine">Physiologie oder Medizin</option>
+              <option value="literature">Literatur</option>
+              <option value="peace">Frieden</option>
+              <option value="economics">Wirtschaftswissenschaften</option>
+            </select>
+          </p>
+        </fieldset>
+        <p>
+          <input type="submit" value="Resultat anzeigen"/>
+        </p>
+      </form>
+    </main>
+    <footer>
+      <p>Copyright&nbsp;©&nbsp;2018&#x2011;2024&nbsp;&nbsp;USIS.</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+
+<!--
+ * Copyright © 2018-2024
+ * Merz Information and Communication Technology AG.
+ * All rights reserved.
+ * 
+ * C021-DE
+ * Einführung in CSS
+-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>University, Science and Literature Information Guide (USLIG)</title>
+    <base href="http://localhost/uslig/"/>
+    <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+  </head>
+  <body>
+    <header>
+      <h1>University, Science and Literature Information Guide (USLIG)</h1>
+      <menu>
+        <div class="dropdown">
+          <button class="dropdown-label">Universitäten</button>
+          <div class="dropdown-points">
+            <a href="universities/list-of-universities-by-name.html">Liste nach Namen</a>
+            <a href="universities/list-of-universities-by-country.html">Liste nach Land</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Wissenschaftler</button>
+          <div class="dropdown-points">
+            <a href="scientists/table-of-scientists.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Schriftsteller</button>
+          <div class="dropdown-points">
+            <a href="writers/table-of-writers.html">Tabelle</a>
+            <a href="awards/list-of-nobel-prizes.html">Liste der Nobelpreise</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-label">Nobelpreise</button>
+          <div class="dropdown-points">
+            <a href="awards/list-of-nobel-prizes.html">Liste</a>
+            <a href="awards/form-for-nobel-prize-laureates.html">Suche nach Nobelpreisträgern</a>
+          </div>
+        </div>
+      </menu>
+    </header>
+    <main>
+      <header>
+        <h2>
+          <data value="CH-002">Universität Zürich</data>
+        </h2>
+      </header>
+      <div class="tiles half">
+        <section id="logo">
+          <h3>Logo</h3>
+          <figure>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Universität_Zürich_logo.svg" alt="Logo Universität Zürich" height="100"/>
+            <figcaption>Universität Zürich</figcaption>
+          </figure>
+        </section>
+        <section></section>
+      </div>
+      <div class="tiles quarter">        
+        <section class="info">
+          <h3>Ort</h3>
+          <p>Zürich</p>
+        </section>
+        <section class="info">
+          <h3>Land</h3>
+          <details>
+            <summary>CH</summary>
+            <p>
+              Switzerland<br/>
+              offiziell: Swiss Confederation
+            </p>
+          </details>
+        </section>
+        <section class="info">
+          <h3>Website</h3>
+          <address>
+            <a href="https://www.uzh.ch" target="_blank">www.uzh.ch</a>
+          </address>
+        </section>
+        <section class="info">
+          <h3>Trägerschaft</h3>
+          <p>öffentlich</p>
+        </section>
+      </div>
+    </main>
+    <footer>
+      <p>Copyright&nbsp;©&nbsp;2018&#x2011;2024&nbsp;&nbsp;USLIG.</p>
+    </footer>
+  </body>
+</html>
