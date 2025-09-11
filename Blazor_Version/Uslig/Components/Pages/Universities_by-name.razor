@@ -1,0 +1,104 @@
+﻿@page "/universities/by-name"
+@rendermode InteractiveServer
+@inject AppDbContext Db
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Universitäten nach Name</PageTitle>
+
+<h1 class="mb-4">Universitäten</h1>
+
+<!-- Suchfeld -->
+<div class="input-group mb-4">
+    <input type="text"
+           class="form-control form-control-lg"
+           placeholder="Universität suchen..."
+           value="@searchTerm"
+           @oninput="OnSearchInput" />
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch">X</button>
+</div>
+
+<!-- Ergebnisliste -->
+@if (universities == null)
+{
+    <p><em>Lade Daten...</em></p>
+}
+else if (!universities.Any())
+{
+    <p><em>Keine Ergebnisse gefunden.</em></p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var uni in universities)
+        {
+            <li class="list-group-item d-flex align-items-center">
+                <img src="@uni.Logo" alt="@uni.Name" style="height:40px; margin-right:1rem;" />
+                <div>
+                    <strong>@uni.Name</strong><br />
+                    <small>
+                        @uni.Ort, @uni.Land –
+                        <a href="https://@uni.Webseite" target="_blank">@uni.Webseite</a>
+                    </small>
+                </div>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string searchTerm = string.Empty;
+    private List<University>? universities;
+    private CancellationTokenSource? _cts; // für debounce
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUniversities();
+    }
+
+    private async Task LoadUniversities()
+    {
+        IQueryable<University> query = Db.Universities;
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var pattern = $"%{searchTerm.Replace(" ", "%")}%";
+            query = query.Where(u => EF.Functions.Like(u.Name, pattern));
+        }
+
+        universities = await query
+            .OrderBy(u => u.Name)
+            .Take(10)
+            .ToListAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        await LoadUniversities();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+
+        // alten debounce abbrechen
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(250, token); // debounce 250ms
+                if (!token.IsCancellationRequested)
+                {
+                    await InvokeAsync(LoadUniversities);
+                }
+            }
+            catch (TaskCanceledException) { }
+        }, token);
+    }
+}
