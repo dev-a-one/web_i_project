@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@rendermode InteractiveServer
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">USLIG</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+
+        <!-- Home -->
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>
+                Home
+            </NavLink>
+        </div>
+
+        <!-- Universitäten (Titel + Unterpunkte) -->
+        <div class="px-3 mt-4 mb-2 menu-section">
+            Universitäten
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/universities/by-name">Liste nach Namen</NavLink>
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/universities/by-country">Liste nach Land</NavLink>
+        </div>
+
+        <!-- Wissenschaftler -->
+        <div class="px-3 mt-4 mb-2 menu-section">
+            Wissenschaftler
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/scientists/list">Tabelle</NavLink>
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/awards/nobelprizes">Liste der Nobelpreise</NavLink>
+        </div>
+
+        <!-- Schriftsteller -->
+        <div class="px-3 mt-4 mb-2 menu-section">
+            Schriftsteller
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/writers/list">Tabelle</NavLink>
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/awards/nobelprizes">Liste der Nobelpreise</NavLink>
+        </div>
+
+        <!-- Nobelpreise -->
+        <div class="px-3 mt-4 mb-2 menu-section">
+            Nobelpreise
+        </div>
+        <div class="nav-item px-4">
+            <NavLink class="nav-link" href="/awards/nobelprizes">Liste</NavLink>
+        </div>
+        <div class="nav-item px-4 mb-3">
+            <NavLink class="nav-link" href="/awards/search">Suche nach Preisträgern</NavLink>
+        </div>
+
+    </nav>
+</div>

@@ -1,1 +1,54 @@
-/.vs
+# Visual Studio spezifisch
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Build-Ausgaben
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider/Resharper
+.idea/
+*.DotSettings.user
+
+# Mac/VS Code/OS-spezifisch
+.vscode/
+*.DS_Store
+*.swp
+
+# Blazor / ASP.NET spezifisch
+wwwroot/*.map
+wwwroot/lib/
+node_modules/
+dist/
+*.bundle.js
+*.bundle.js.map
+
+# Publish Output
+publish/
+Blazor_Deployment/
+
+# Paket-Manager (falls npm/yarn/pnpm genutzt wird)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+*.log
+
+# User-Secrets (falls genutzt)
+secrets.json
+
+# ASP.NET spezifisch
+appsettings.Development.json
