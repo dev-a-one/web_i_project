@@ -3,6 +3,8 @@
 @inject AppDbContext Db
 @using Microsoft.EntityFrameworkCore
 
+
+
 <PageTitle>Universitäten nach Name</PageTitle>
 
 <h1 class="mb-4">Universitäten</h1>
@@ -19,17 +21,17 @@
 
 <!-- Länder-Filter (mit Flag-Emoji); ab md sichtbar, darunter ausgeblendet -->
 <div class="d-none d-md-flex flex-wrap align-items-center gap-3 mb-4">
-    @foreach (var code in countryCodes)
+    @foreach (var cCode in countryCodes)
     {
-        var id = $"cc-{code}";
+        var id = $"cc-{cCode}";
         <div class="form-check form-check-inline">
             <input class="form-check-input"
                    type="checkbox"
                    id="@id"
-                   checked="@selectedCountries.Contains(code)"
-                   @onchange="e => OnCountryToggle(code, e)" />
-            <label class="form-check-label" for="@id" title="@code">
-                @FlagEmoji(code) <span class="ms-1">@code</span>
+                   checked="@selectedCountries.Contains(cCode)"
+                   @onchange="e => OnCountryToggle(cCode, e)" />
+            <label class="form-check-label" for="@id" title="@cCode">
+                <span class="ms-1">@cCode</span>
             </label>
         </div>
     }
@@ -149,14 +151,4 @@ else
         TriggerDebouncedReload();
     }
 
-    // Flag-Emoji (A..Z -> Regional Indicator Symbols)
-    private static string FlagEmoji(string code)
-    {
-        if (string.IsNullOrWhiteSpace(code) || code.Length != 2) return code;
-        code = code.ToUpperInvariant();
-        int baseCode = 0x1F1E6; // 🇦
-        string c1 = char.ConvertFromUtf32(baseCode + (code[0] - 'A'));
-        string c2 = char.ConvertFromUtf32(baseCode + (code[1] - 'A'));
-        return c1 + c2;
-    }
 }
