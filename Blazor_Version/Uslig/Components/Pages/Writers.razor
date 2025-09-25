@@ -1,0 +1,124 @@
+﻿@page "/writers"
+@rendermode InteractiveServer
+@inject AppDbContext Db
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Schriftsteller</PageTitle>
+
+<h1 class="mb-4">Schriftsteller</h1>
+
+<div class="input-group mb-3">
+    <input type="text"
+           class="form-control form-control-lg"
+           placeholder="Autor oder Werk suchen..."
+           value="@searchTerm"
+           @oninput="OnSearchInput" />
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch" title="Suche leeren">X</button>
+</div>
+
+@if (writers is null)
+{
+    <p><em>Lade Daten…</em></p>
+}
+else if (!writers.Any())
+{
+    <p><em>Keine Ergebnisse gefunden.</em></p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var a in writers)
+        {
+            <li class="list-group-item">
+                <div class="d-flex">
+                    <div class="flex-grow-1">
+                        <strong>@a.FullName</strong><br />
+                        <small>
+                            * @(a.BirthDate.ToString("dd.MM.yyyy"))
+                            @if (a.DeathDate is not null)
+                            {
+                                <text> — † @(((DateTime)a.DeathDate).ToString("dd.MM.yyyy"))</text>
+                            }
+                        </small>
+                    </div>
+                </div>
+
+                @if (a.Works is not null && a.Works.Any())
+                {
+                    <div class="mt-2 d-flex flex-column gap-1">
+                        @foreach (var w in a.Works.OrderBy(w => w.Year))
+                        {
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-secondary me-2">@w.Year</span>
+                                <span class="small">@w.Title</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string searchTerm = string.Empty;
+    private List<Writer>? writers;
+    private CancellationTokenSource? _cts;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        IQueryable<Writer> q = Db.Writers
+            .Include(a => a.Works);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var pattern = $"%{searchTerm.Replace(" ", "%")}%";
+            q = q.Where(a =>
+                EF.Functions.Like(a.FirstName, pattern) ||
+                EF.Functions.Like(a.LastName, pattern) ||
+                a.Works.Any(w => EF.Functions.Like(w.Title, pattern))
+            );
+        }
+
+        writers = await q
+            .OrderBy(a => a.LastName).ThenBy(a => a.FirstName)
+            .Take(20)
+            .ToListAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        await Load();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        DebounceReload();
+    }
+
+    private void DebounceReload()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(250, token);
+                if (!token.IsCancellationRequested)
+                {
+                    await InvokeAsync(Load);
+                }
+            }
+            catch (TaskCanceledException) { }
+        }, token);
+    }
+}
