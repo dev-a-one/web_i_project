@@ -1,0 +1,133 @@
+﻿@page "/scientists"
+@rendermode InteractiveServer
+@inject AppDbContext Db
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Wissenschaftler</PageTitle>
+
+<h1 class="mb-4">Wissenschaftler</h1>
+
+<!-- Suchfeld -->
+<div class="input-group mb-3">
+    <input type="text"
+           class="form-control form-control-lg"
+           placeholder="Wissenschaftler suchen..."
+           value="@searchTerm"
+           @oninput="OnSearchInput" />
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch" title="Suche leeren">X</button>
+</div>
+
+<!-- Ergebnisliste -->
+@if (scientists is null)
+{
+    <p><em>Lade Daten...</em></p>
+}
+else if (!scientists.Any())
+{
+    <p><em>Keine Ergebnisse gefunden.</em></p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var s in scientists)
+        {
+            <li class="list-group-item">
+                <!-- Kopfzeile: Wissenschaftler (kein Bild links) -->
+                <div class="d-flex align-items-start">
+                    <div class="flex-grow-1">
+                        <strong>@s.FirstName @s.LastName</strong><br />
+                        <small>
+                            * @(s.BirthDate.ToString("dd.MM.yyyy"))
+                            @if (s.DeathDate is not null)
+                            {
+                                    <text> — † @(((DateTime)s.DeathDate).ToString("dd.MM.yyyy"))</text>
+                            }
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Zweite Zeile: Alma Mater(n) -->
+                @if (s.AlmaMaters is not null && s.AlmaMaters.Any())
+                {
+                    <div class="mt-2 d-flex flex-column gap-2">
+                        @foreach (var u in s.AlmaMaters.OrderBy(u => u.Name))
+                        {
+                            <div class="d-flex align-items-center">
+                                <img src="@u.Logo" alt="@u.Name" style="height:28px; width:auto; margin-right:.75rem;" />
+                                <div class="small">
+                                    <strong>@u.Name</strong>
+                                    <span class="text-body-secondary">—</span>
+                                    <a href="@($"https://{u.Webseite}")" target="_blank">@u.Webseite</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string searchTerm = string.Empty;
+    private List<Scientist>? scientists;
+    private CancellationTokenSource? _cts; // debounce
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadScientists();
+    }
+
+    private async Task LoadScientists()
+    {
+        IQueryable<Scientist> query = Db.Scientist
+            .Include(s => s.AlmaMaters);
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var pattern = $"%{searchTerm.Replace(" ", "%")}%";
+            query = query.Where(s =>
+                EF.Functions.Like(s.FirstName, pattern) ||
+                EF.Functions.Like(s.LastName, pattern));
+        }
+
+        scientists = await query
+            .OrderBy(s => s.LastName).ThenBy(s => s.FirstName)
+            .Take(10)
+            .ToListAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        await LoadScientists();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        TriggerDebouncedReload();
+    }
+
+    private void TriggerDebouncedReload()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(250, token);
+                if (!token.IsCancellationRequested)
+                {
+                    await InvokeAsync(LoadScientists);
+                }
+            }
+            catch (TaskCanceledException) { }
+        }, token);
+    }
+}
