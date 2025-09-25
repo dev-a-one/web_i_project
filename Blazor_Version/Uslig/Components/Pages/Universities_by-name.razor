@@ -8,13 +8,31 @@
 <h1 class="mb-4">Universitäten</h1>
 
 <!-- Suchfeld -->
-<div class="input-group mb-4">
+<div class="input-group mb-3">
     <input type="text"
            class="form-control form-control-lg"
            placeholder="Universität suchen..."
            value="@searchTerm"
            @oninput="OnSearchInput" />
-    <button class="btn btn-outline-secondary" @onclick="ClearSearch">X</button>
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch" title="Suche leeren">X</button>
+</div>
+
+<!-- Länder-Filter (mit Flag-Emoji); ab md sichtbar, darunter ausgeblendet -->
+<div class="d-none d-md-flex flex-wrap align-items-center gap-3 mb-4">
+    @foreach (var code in countryCodes)
+    {
+        var id = $"cc-{code}";
+        <div class="form-check form-check-inline">
+            <input class="form-check-input"
+                   type="checkbox"
+                   id="@id"
+                   checked="@selectedCountries.Contains(code)"
+                   @onchange="e => OnCountryToggle(code, e)" />
+            <label class="form-check-label" for="@id" title="@code">
+                @FlagEmoji(code) <span class="ms-1">@code</span>
+            </label>
+        </div>
+    }
 </div>
 
 <!-- Ergebnisliste -->
@@ -37,7 +55,7 @@ else
                     <strong>@uni.Name</strong><br />
                     <small>
                         @uni.Ort, @uni.Land –
-                        <a href="@("https://" + uni.Webseite)" target="_blank">@uni.Webseite</a>
+                        <a href="@($"https://{uni.Webseite}")" target="_blank">@uni.Webseite</a>
                     </small>
                 </div>
             </li>
@@ -46,9 +64,15 @@ else
 }
 
 @code {
+    // --- Suche + Filter-Status ---
     private string searchTerm = string.Empty;
     private List<University>? universities;
-    private CancellationTokenSource? _cts; // für debounce
+
+    // harte Liste deiner Länder (Distinct aus deiner Tabelle)
+    private readonly string[] countryCodes = new[] { "US", "HK", "CH", "TW", "DE", "IT", "AT", "FR", "BE", "GB" };
+    private readonly HashSet<string> selectedCountries = new();
+
+    private CancellationTokenSource? _cts; // debounce
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,10 +83,18 @@ else
     {
         IQueryable<University> query = Db.Universities;
 
+        // Textsuche (LIKE, Spaces -> %)
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             var pattern = $"%{searchTerm.Replace(" ", "%")}%";
             query = query.Where(u => EF.Functions.Like(u.Name, pattern));
+        }
+
+        // Länder-Filter (IN (...) )
+        if (selectedCountries.Count > 0)
+        {
+            var filter = selectedCountries.ToList(); // EF kann List.Contains -> SQL IN
+            query = query.Where(u => filter.Contains(u.Land));
         }
 
         universities = await query
@@ -79,11 +111,9 @@ else
         await LoadUniversities();
     }
 
-    private void OnSearchInput(ChangeEventArgs e)
+    // ---- Debounce-Trigger zentral ----
+    private void TriggerDebouncedReload()
     {
-        searchTerm = e.Value?.ToString() ?? string.Empty;
-
-        // alten debounce abbrechen
         _cts?.Cancel();
         _cts = new CancellationTokenSource();
         var token = _cts.Token;
@@ -92,7 +122,7 @@ else
         {
             try
             {
-                await Task.Delay(250, token); // debounce 250ms
+                await Task.Delay(250, token);
                 if (!token.IsCancellationRequested)
                 {
                     await InvokeAsync(LoadUniversities);
@@ -100,5 +130,33 @@ else
             }
             catch (TaskCanceledException) { }
         }, token);
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        TriggerDebouncedReload();
+    }
+
+    private void OnCountryToggle(string code, ChangeEventArgs e)
+    {
+        var isChecked = e.Value is bool b ? b : string.Equals(e.Value?.ToString(), "true", StringComparison.OrdinalIgnoreCase);
+        if (isChecked)
+            selectedCountries.Add(code);
+        else
+            selectedCountries.Remove(code);
+
+        TriggerDebouncedReload();
+    }
+
+    // Flag-Emoji (A..Z -> Regional Indicator Symbols)
+    private static string FlagEmoji(string code)
+    {
+        if (string.IsNullOrWhiteSpace(code) || code.Length != 2) return code;
+        code = code.ToUpperInvariant();
+        int baseCode = 0x1F1E6; // 🇦
+        string c1 = char.ConvertFromUtf32(baseCode + (code[0] - 'A'));
+        string c2 = char.ConvertFromUtf32(baseCode + (code[1] - 'A'));
+        return c1 + c2;
     }
 }
