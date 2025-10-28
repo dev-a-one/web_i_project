@@ -24,7 +24,7 @@ public class AppDbContext : DbContext
         // n:m Scientist <-> University mit explizitem Join-Tabellennamen
         modelBuilder.Entity<Scientist>()
             .HasMany(s => s.AlmaMaters)
-            .WithMany() // (uni braucht keine Rücknavigation)
+            .WithMany()
             .UsingEntity<Dictionary<string, object>>(
                 "ScientistAlmaMater",
                 j => j.HasOne<University>()
