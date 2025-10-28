@@ -1,0 +1,108 @@
+﻿@page "/nobelprizes"
+@rendermode InteractiveServer
+@inject AppDbContext Db
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Nobelpreise</PageTitle>
+
+<h1 class="mb-4">Nobelpreisträger</h1>
+
+<!-- Serch -->
+<div class="input-group mb-3">
+    <input type="text"
+           class="form-control form-control-lg"
+           placeholder="Nach Name oder Fachrichtung suchen..."
+           value="@searchTerm"
+           @oninput="OnSearchInput" />
+    <button class="btn btn-outline-secondary" @onclick="ClearSearch" title="Suche leeren">X</button>
+</div>
+
+@if (laureates == null)
+{
+    <p><em>Lade Daten...</em></p>
+}
+else if (!laureates.Any())
+{
+    <p><em>Keine Ergebnisse gefunden.</em></p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var l in laureates)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@l.FullName</strong><br />
+                    <small>@l.Category (@l.Year)</small>
+                </div>
+                <span class="badge bg-primary">@l.Year</span>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string searchTerm = string.Empty;
+    private List<NobelLaureate>? laureates;
+    private CancellationTokenSource? _cts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        IQueryable<NobelLaureate> q = Db.NobelLaureates;
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            var pattern = $"%{searchTerm.Replace(" ", "%")}%";
+            q = q.Where(n =>
+                EF.Functions.Like(n.FirstName, pattern) ||
+                EF.Functions.Like(n.LastName, pattern) ||
+                EF.Functions.Like(n.Category, pattern)
+            );
+        }
+
+        laureates = await q
+            .OrderByDescending(n => n.Year)
+            .ThenBy(n => n.LastName)
+            .Take(50)
+            .ToListAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        await Load();
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? string.Empty;
+        DebounceReload();
+    }
+
+    private void DebounceReload()
+    {
+        _cts?.Cancel();
+        _cts = new CancellationTokenSource();
+        var token = _cts.Token;
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await Task.Delay(250, token);
+                if (!token.IsCancellationRequested)
+                {
+                    await InvokeAsync(Load);
+                }
+            }
+            catch (TaskCanceledException) { }
+        }, token);
+    }
+}

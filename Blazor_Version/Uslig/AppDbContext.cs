@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<Scientist> Scientist { get; set; } = default!;
     public DbSet<Writer> Writers { get; set; } = default!;
     public DbSet<Work> Works { get; set; } = default!;
+    public DbSet<NobelLaureate> NobelLaureates { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +55,14 @@ public class AppDbContext : DbContext
              .HasForeignKey(w => w.WriterId)
              .OnDelete(DeleteBehavior.Cascade);
         });
+
+        modelBuilder.Entity<NobelLaureate>(entity =>
+        {
+            entity.Property(e => e.Category).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.FirstName).HasMaxLength(100);
+            entity.Property(e => e.LastName).HasMaxLength(100);
+        });
+
     }
 }
 
@@ -109,3 +118,16 @@ public class Work
     public int WriterId { get; set; }
     public Writer Writer { get; set; } = default!;
 }
+
+public class NobelLaureate
+{
+    public int Id { get; set; }
+
+    public int Year { get; set; }
+    public string Category { get; set; } = "";
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+
+    public string FullName => $"{FirstName} {LastName}".Trim();
+}
+
