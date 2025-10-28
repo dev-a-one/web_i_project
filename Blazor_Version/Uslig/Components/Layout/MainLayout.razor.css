@@ -5,7 +5,9 @@
     min-height: 100vh;
     position: relative;
     display: flex;
-    flex-direction: column; /* Mobile: oben->unten */
+    flex-direction: column; /* Mobile: Sidebar stacked oben, Content darunter */
+    background-color: #ffffff;
+    color: #000;
 }
 
 /* Hauptbereich als Flex-Spalte, damit Footer unten "andockt" */
@@ -14,33 +16,49 @@ main {
     flex-direction: column;
     flex: 1 1 auto; /* füllt übrigen Platz */
     min-width: 0; /* verhindert Überlauf bei breiten Inhalten */
+    background-color: #fff;
+    color: #000;
 }
 
     /* Inhalt füllt die Spalte, Footer wird ans Ende gedrückt */
     .content,
     main > article {
         flex: 1 1 auto;
+        background-color: #fff;
+        color: #000;
+        /* du kannst hier optional padding geben, aber aktuell macht das Layout es schon */
     }
 
 /* Footer-Komponente (Components/Layout/Footer.razor) */
 .footer {
     margin-top: auto; /* immer an das untere Ende der Spalte */
-    border-top: 1px solid rgba(0,0,0,.06);
+    background-color: #122945; /* dunkelstes Blau */
+    color: #fff;
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(211,195,177,0.4); /* sandfarbener Akzent */
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    text-align: center;
 }
 
 /* ================ Seitenleisten-/Top-Bar-Styling ================ */
 
+/* Sidebar links */
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background: linear-gradient( 180deg, #122945 0%, #28466D 40%, #455C7B 100% );
+    color: #fff;
+    box-shadow: 2px 0 4px rgb(0 0 0 / 0.4);
 }
 
+/* Die Top-Leiste über dem Contentbereich rechts */
 .top-row {
-    background-color: #f7f7f7;
-    border-bottom: 1px solid #d6d5d5;
+    background-color: #fdfdfc; /* sehr hell, leicht warm statt klinisch grau */
+    border-bottom: 1px solid rgba(211,195,177,0.5); /* D3C3B1 Akzentlinie */
     justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
+    color: #122945;
 }
 
     .top-row ::deep a,
@@ -48,11 +66,14 @@ main {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
+        color: #122945;
+        font-weight: 500;
     }
 
         .top-row ::deep a:hover,
         .top-row ::deep .btn-link:hover {
             text-decoration: underline;
+            color: #28466D;
         }
 
         .top-row ::deep a:first-child {
@@ -65,12 +86,22 @@ main {
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
         .top-row ::deep a,
         .top-row ::deep .btn-link {
             margin-left: 0;
         }
+
+    /* Auf kleinen Screens liegt die Sidebar oberhalb, volle Breite.
+       Wir geben ihr unten einen soften Trenner in Sand. */
+    .sidebar {
+        width: 100%;
+        box-shadow: 0 2px 4px rgb(0 0 0 / 0.4);
+        border-bottom: 1px solid rgba(211,195,177,0.4);
+    }
 }
 
 @media (min-width: 641px) {
@@ -86,12 +117,15 @@ main {
         top: 0;
         left: 0;
         overflow-y: auto; /* lange Menüs scrollbar */
+        border-right: 1px solid rgba(211,195,177,0.3); /* feine Trennlinie Sand */
     }
 
     .top-row {
         position: sticky;
         top: 0;
         z-index: 1;
+        background-color: #fdfdfc;
+        border-bottom: 1px solid rgba(211,195,177,0.5);
     }
 
         .top-row.auth ::deep a:first-child {
@@ -107,10 +141,11 @@ main {
     }
 }
 
-/* ================ Blazor Error UI (unverändert) ================ */
+/* ================ Blazor Error UI (unverändert technisch, nur Farbe angepasst) ================ */
 
 #blazor-error-ui {
-    background: lightyellow;
+    background: #D3C3B1; /* sand als Warnhintergrund */
+    color: #122945;
     bottom: 0;
     box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
     display: none;
@@ -119,6 +154,8 @@ main {
     position: fixed;
     width: 100%;
     z-index: 1000;
+    font-weight: 500;
+    border-top: 2px solid #122945;
 }
 
     #blazor-error-ui .dismiss {
@@ -126,4 +163,6 @@ main {
         position: absolute;
         right: 0.75rem;
         top: 0.5rem;
+        color: #122945;
+        font-weight: bold;
     }

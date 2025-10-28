@@ -1,0 +1,21 @@
+﻿.footer {
+    background-color: #122945; /* deep navy foundation */
+    color: #D3C3B1; /* sand-colored text for warmth & readability */
+    border-top: 2px solid #455C7B; /* soft accent divider */
+    text-align: center;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.2px;
+}
+
+/* Hover effect for links inside footer, if any */
+.footer a {
+    color: #D3C3B1;
+    text-decoration: underline dotted;
+}
+
+.footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
