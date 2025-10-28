@@ -1,4 +1,4 @@
-﻿# 🎓 USLIG – University, Science and Literature Information Guide
+﻿# USLIG – University, Science and Literature Information Guide
 
 Ein interaktives Informationsportal, entwickelt mit **Blazor Server**, **Entity Framework Core** und **SQLite**.  
 Die Anwendung bietet strukturierte Übersichten über **Universitäten**, **Wissenschaftler**, **Schriftsteller** und **Nobelpreisträger** – inklusive intelligenter Suchfunktion, Filtermöglichkeiten und relationaler Datenbankverknüpfungen.
@@ -20,7 +20,7 @@ Jede Seite verfügt über eine **debounced Suche** (250 ms), die mit dem Entity 
 
 ---
 
-## 🧰 Verwendete Technologien
+## Verwendete Technologien
 
 | Komponente | Beschreibung |
 |-------------|---------------|
@@ -48,7 +48,7 @@ Die Daten wurden über eigene `INSERT`-Skripte in SQLite eingefügt.
 
 ---
 
-## 💡 Besondere Features
+## Besondere Features
 
 -  **Debounced Live-Suche** (mit Entity Framework, 250 ms Delay)
 -  **Filterung nach Ländern** (mit Flag-Emoji & Checkboxen)
@@ -59,7 +59,7 @@ Die Daten wurden über eigene `INSERT`-Skripte in SQLite eingefügt.
 
 ---
 
-## ⚙️ Installation & Start
+## Installation & Start
 
 ### Voraussetzungen
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
