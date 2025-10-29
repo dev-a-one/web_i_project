@@ -4,6 +4,7 @@ public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+
     public DbSet<University> Universities { get; set; } = default!;
     public DbSet<Scientist> Scientist { get; set; } = default!;
     public DbSet<Writer> Writers { get; set; } = default!;
@@ -14,7 +15,6 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Basics
         modelBuilder.Entity<Scientist>(e =>
         {
             e.Property(p => p.FirstName).IsRequired().HasMaxLength(100);
@@ -80,15 +80,11 @@ public class University
 public class Scientist
 {
     public int Id { get; set; }
-
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-
     public DateTime BirthDate { get; set; }
     public DateTime? DeathDate { get; set; }
-
     public ICollection<University> AlmaMaters { get; set; } = new List<University>();
-
     public string FullName => $"{FirstName} {LastName}";
 }
 

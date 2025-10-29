@@ -66,7 +66,7 @@ else
 }
 
 @code {
-    // --- Suche + Filter-Status ---
+    // Suche + Filter-Status
     private string searchTerm = string.Empty;
     private List<University>? universities;
 
@@ -92,7 +92,7 @@ else
             query = query.Where(u => EF.Functions.Like(u.Name, pattern));
         }
 
-        // Länder-Filter (IN (...) )
+        // Länder-Filter
         if (selectedCountries.Count > 0)
         {
             var filter = selectedCountries.ToList(); // EF kann List.Contains -> SQL IN
@@ -113,7 +113,7 @@ else
         await LoadUniversities();
     }
 
-    // ---- Debounce-Trigger zentral ----
+    //Debounced
     private void TriggerDebouncedReload()
     {
         _cts?.Cancel();

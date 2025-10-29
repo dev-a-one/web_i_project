@@ -4,10 +4,10 @@
 
 namespace Uslig.Migrations
 {
-    /// <inheritdoc />
+    /// <inheritdoc  />
     public partial class AddUniversitiesTable : Migration
     {
-        /// <inheritdoc />
+        /// <inheritdoc  />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -32,7 +32,7 @@ namespace Uslig.Migrations
                 });
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc  />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

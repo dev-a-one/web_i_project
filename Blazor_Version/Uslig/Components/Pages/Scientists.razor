@@ -46,7 +46,7 @@ else
                     </div>
                 </div>
 
-                <!-- Zweite Zeile: Alma Mater(n) -->
+                <!-- Alma Mater -->
                 @if (s.AlmaMaters is not null && s.AlmaMaters.Any())
                 {
                     <div class="mt-2 d-flex flex-column gap-2">
@@ -74,7 +74,7 @@ else
 @code {
     private string searchTerm = string.Empty;
     private List<Scientist>? scientists;
-    private CancellationTokenSource? _cts; // debounce
+    private CancellationTokenSource? _cts; // debounce token
 
     protected override async Task OnInitializedAsync()
     {
@@ -114,6 +114,7 @@ else
         TriggerDebouncedReload();
     }
 
+    //Debouced
     private void TriggerDebouncedReload()
     {
         _cts?.Cancel();
